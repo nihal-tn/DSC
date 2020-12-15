@@ -155,15 +155,25 @@ void delete_(int k,struct node *temp_hea)
             else if(prev->left->n==k)
             {
                 prev->left=temp_hea->right;
-                free(temp_head);
+                free(temp_hea);
             }
             printf("successfully deleted %d \n",temp_hea->n);
             return;
         }
         else if(temp_hea->right!=NULL && temp_hea->left!=NULL)
         {
-            //if node has two children
-            
+            //if the required node has two children
+            struct node *dummy,*dummy_prev;
+            if (depth(temp_hea->right)>=depth(temp_hea->left))
+            {
+                //use inorder successor
+                
+            }
+            else if (depth(temp_hea->right)<depth(temp_hea->left))
+            {
+                //use inorder predecessor
+                
+            }
         }
     }
 
