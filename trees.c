@@ -161,7 +161,16 @@ void delete_(int k,struct node *temp_hea)
         else if(temp_hea->right!=NULL && temp_hea->left!=NULL)
         {
             //node has two sub-tree
-            
+            if(depth(temp_hea->right) >= depth(temp_hea->left))
+            {
+                //if right sub-tree has more depth than left sub-tree
+                
+            }
+            if(depth(temp_hea->right) < depth(temp_hea->left))
+            {
+                //if left sub-tree has more depth than right sub-tree
+
+            }
         }
     }
     else if (k>temp_hea->n && temp_hea->right!=NULL)
