@@ -5,8 +5,8 @@ struct node
     int n;
     struct node *right,*left;
 };
-struct node *root;
-struct node *temp_head, *prev;
+struct node *root_;
+struct node *temp_head;
 void insert_1(int k)
 {
 
@@ -46,7 +46,7 @@ void insert_2(int k)
 }
 void insert(int k)
 {
-    temp_head=root;
+    temp_head=root_;
     insert_1(k);
     insert_2(k);
 }
@@ -108,99 +108,69 @@ int depth(struct node* temp_head)
     else
         return rightDepth + 1;
 }
-void delete_(int k,struct node *temp_hea)
+struct node* min(struct node *temp)
 {
-    if(temp_hea->n==k)
+    struct node *current=temp;
+    while (current && current->left!=NULL)
     {
-        printf("%d<--%d-->%d\n",temp_hea->left,temp_hea,temp_hea->right);
-        if(temp_hea->right==NULL && temp_hea->left==NULL)
+        current=current->left;
+    }
+    return current;
+}
+struct node* max(struct node *temp)
+{
+    struct node *current=temp;
+    while (current && current->right!=NULL)
+    {
+        current=current->right;
+    }
+    return current;
+}
+struct node* delete_(struct node* root, int key)
+{
+    if (root == NULL)
+        return root;
+    if (key < root->n)
+        root->left = delete_(root->left, key);
+    else if (key > root->n)
+        root->right = delete_(root->right, key);
+    else 
+    {
+        if (root->left == NULL) 
         {
-            //node is leaf
-            if(prev->right->n==k)
-            {
-                prev->right=NULL;
-            }
-            else if(prev->left->n==k)
-            {
-                prev->left=NULL;
-            }
-            printf("successfully deleted %d \n",temp_hea->n);
-            free(temp_hea);
-            return;
+            struct node* temp = root->right;
+            free(root);
+            return temp;
         }
-        else if(temp_hea->right==NULL && temp_hea->left!=NULL)
+        else if (root->right == NULL)
         {
-            //node has only one child (only left child) 
-            if(prev->right->n==k)
-            {
-                prev->right=temp_hea->left;
-                free(temp_hea) ;
-            }
-            else if(prev->left->n==k)
-            {
-                prev->left=temp_hea->left;
-                free(temp_hea);
-            }
-            printf("successfully deleted %d \n",temp_hea->n);
-            return;
+            struct node* temp = root->left;
+            free(root);
+            return temp;
         }
-        else if(temp_hea->right!=NULL && temp_hea->left==NULL)
+        if(depth(root->right)>=depth(root->left))
         {
-            //node has only one child (only right child) 
-            if(prev->right->n==k)
-            {
-                prev->right=temp_hea->right;
-                free(temp_hea) ;
-            }
-            else if(prev->left->n==k)
-            {
-                prev->left=temp_hea->right;
-                free(temp_hea);
-            }
-            printf("successfully deleted %d \n",temp_hea->n);
-            return;
+            struct node* temp = min(root->right);
+            root->n = temp->n;
+            root->right = delete_(root->right, temp->n);
         }
-        else if(temp_hea->right!=NULL && temp_hea->left!=NULL)
+        else if(depth(root->right)<depth(root->left))
         {
-            //if the required node has two children
-            struct node *dummy,*dummy_prev;
-            if (depth(temp_hea->right)>=depth(temp_hea->left))
-            {
-                //use inorder successor
-                
-            }
-            else if (depth(temp_hea->right)<depth(temp_hea->left))
-            {
-                //use inorder predecessor
-                
-            }
+            struct node* temp = max(root->left);
+            root->n = temp->n;
+            root->left = delete_(root->left, temp->n);
         }
     }
-
-    else if (k>temp_hea->n && temp_hea->right!=NULL)
-    {
-        prev=temp_hea;
-        delete_(k, temp_hea->right);
-    }
-    else if (k<temp_hea->n && temp_hea->left!=NULL)
-    {
-        prev=temp_hea;
-        delete_(k, temp_hea->left);
-    }
-    else
-    {
-        printf("%d is not in the tree....\n",k);
-        return;
-    }
+    return root;
 }
 int main()
 {
     int e,a,o,d;
-    root=(struct node*)malloc(sizeof(struct node));
-    root->left=NULL;
-    root->right=NULL;
+    root_=(struct node*)malloc(sizeof(struct node));
+    root_->left=NULL;
+    root_->right=NULL;
     printf("enter the data in the root\n");
-    scanf("%d",&root->n);
+    scanf("%d",&root_->n);
     while(1)
     {
         printf("to enter the elements into the tree enter 1\n");
@@ -210,6 +180,8 @@ int main()
         printf("to display the elements in the tree in postorder format enter 5\n");
         printf("to delete the elements in the tree enter 6\n");
         printf("to the depth of the tree enter 7\n") ;
+        printf("to get the maximum value of the tree enter 8\n") ;
+        printf("to get the minimum value of the tree enter 9\n") ;
         scanf("%d",&o);
         if(o==1)
         {
@@ -227,36 +199,48 @@ int main()
         {
             printf("enter the element that you want to search for \n");
             scanf("%d",&e);
-            temp_head=root;
+            temp_head=root_;
             search(e);
         }
         else if(o==3)
         {
-            temp_head=root;
+            temp_head=root_;
             inorder(temp_head);
         }
         else if(o==4)
         {
-            temp_head=root;
+            temp_head=root_;
             preorder(temp_head);
         }
         else if(o==5)
         {
-            temp_head=root;
+            temp_head=root_;
             postorder(temp_head);
         }
         else if(o==6)
         {
-            temp_head=root;
+            struct node *tem=root_;
             printf("enter the element that you want to delete\n");
             scanf("%d",&e);
-            delete_(e, temp_head);
+            struct node *deleted=delete_(tem,e);
         }
-        if(o==7)
+        else if(o==7)
         {
-            temp_head=root;
+            temp_head=root_;
             d=depth(temp_head);
             printf("depth of the tree is %d\n",d);
+        }
+        else if(o==8)
+        {
+            temp_head=root_;
+            struct node *max_=max(temp_head);
+            printf("maximum value in the tree is %d ",max_->n);
+        }
+        else if(o==9)
+        {
+            temp_head=root_;
+            struct node *min_=min(temp_head);
+            printf("minimum value in the tree is %d ",min_->n);   
         }
 
         else
