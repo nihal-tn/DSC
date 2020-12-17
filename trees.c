@@ -33,6 +33,7 @@ void insert_2(int k)
         delta->n=k;
         temp_head->right=delta;
         printf("%d is inserted to the right of %d \n",k,temp_head->n);
+        return;
     }
     else if(k<temp_head->n)
     {
@@ -43,6 +44,7 @@ void insert_2(int k)
         delta->n=k;
         temp_head->left=delta;
         printf("%d is inserted to the left of %d \n",k,temp_head->n);
+        return;
     }
 }
 void insert(int k)
@@ -141,16 +143,21 @@ struct node* delete_(struct node* root, int key)
         root->right = delete_(root->right, key);
     else
     {
+        //write some code to delete root_ node from the tree....... 
         if (root->left == NULL)
         {
             struct node* temp = root->right;
+            struct node* du=root->right;
             free(root);
+            root_=du;
             return temp;
         }
         else if (root->right == NULL)
         {
             struct node* temp = root->left;
+            struct node *du=root->left;
             free(root);
+            root_=du;
             return temp;
         }
         if(depth(root->right)>=depth(root->left))
@@ -192,8 +199,10 @@ void balance(struct node *dummy)
     {
         int k=dummy->n;
         temp_head=root_;
-        delete_(temp_head,k);
+        delete_(temp_head,dummy->n);
+        printf("%d is deleted\n",k);
         insert(k);
+        printf("%d is inserted\n",k);
     }
 }
 int main()
