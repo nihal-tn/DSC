@@ -149,15 +149,13 @@ struct node* delete_(struct node* root, int key)
             struct node* temp = root->right;
             struct node* du=root->right;
             free(root);
-            root_=du;
             return temp;
         }
         else if (root->right == NULL)
         {
             struct node* temp = root->left;
-            struct node *du=root->left;
+            struct node* du=root->left;
             free(root);
-            root_=du;
             return temp;
         }
         if(depth(root->right)>=depth(root->left))
@@ -199,10 +197,9 @@ void balance(struct node *dummy)
     {
         int k=dummy->n;
         temp_head=root_;
-        delete_(temp_head,dummy->n);
+        root_=delete_(temp_head,dummy->n);
         printf("%d is deleted\n",k);
         insert(k);
-        printf("%d is inserted\n",k);
     }
 }
 int main()
@@ -278,12 +275,23 @@ int main()
             temp_head=root_;
             postorder(temp_head);
         }
-        else if(o==6)
+        else if(o==6 && c==1)
         {
             struct node *tem=root_;
             printf("enter the element that you want to delete\n");
             scanf("%d",&e);
-            struct node *deleted=delete_(tem,e);
+            root_=delete_(tem,e);
+            printf("value in global root = %d \n",root_->n);
+        }
+        else if(o==6 && c==2) 
+        {
+            struct node *tem=root_;
+            printf("enter the element that you want to delete\n") ;
+            scanf("%d",&e) ;
+            root_=delete_(tem,e);
+            temp_head=root_;
+            balance(temp_head);
+            printf("value in global root = %d \n",root_->n);
         }
         else if(o==7)
         {
