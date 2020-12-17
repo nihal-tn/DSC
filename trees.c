@@ -1,5 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
+#include<stdbool.h>
 struct node
 {
     int n;
@@ -126,6 +127,10 @@ struct node* max(struct node *temp)
     }
     return current;
 }
+int balance_factor(struct node * dummy)
+{
+    return depth(dummy->left) - depth(dummy->right) ;
+}
 struct node* delete_(struct node* root, int key)
 {
     if (root == NULL)
@@ -134,9 +139,9 @@ struct node* delete_(struct node* root, int key)
         root->left = delete_(root->left, key);
     else if (key > root->n)
         root->right = delete_(root->right, key);
-    else 
+    else
     {
-        if (root->left == NULL) 
+        if (root->left == NULL)
         {
             struct node* temp = root->right;
             free(root);
@@ -163,27 +168,58 @@ struct node* delete_(struct node* root, int key)
     }
     return root;
 }
+bool is_Height_Balanced(struct node *root)
+{
+    int leftHeight, rightHeight;
+    if(root == NULL)
+        return true;
+    leftHeight = depth(root->left);
+    rightHeight = depth(root->right);
+    if(abs(leftHeight - rightHeight) <= 1 &&
+            is_Height_Balanced(root->right) &&
+            is_Height_Balanced(root->left))
+        return true;
+    else
+        return false;
+}
+void balance(struct node *dummy)
+{
+    if (dummy==NULL)
+        return;
+    balance(dummy->left);
+    balance(dummy->right);
+    if(!(is_Height_Balanced(dummy))) 
+    {
+        int k=dummy->n;
+        temp_head=root_;
+        delete_(temp_head,k);
+        insert(k);
+    }
+}
 int main()
 {
-    int e,a,o,d;
+    int e,a,o,d,c;
     root_=(struct node*)malloc(sizeof(struct node));
     root_->left=NULL;
     root_->right=NULL;
     printf("enter the data in the root\n");
     scanf("%d",&root_->n);
+    printf("for normal tree enter 1\nfor balanced tree enter 2\n") ;
+    scanf("%d",&c);
     while(1)
     {
-        printf("to enter the elements into the tree enter 1\n");
-        printf("to search for the element if it is there in the tree enter 2\n");
-        printf("to display the elements in the tree in inorder format enter 3\n");
-        printf("to display the elements in the tree in preorder format enter 4\n");
-        printf("to display the elements in the tree in postorder format enter 5\n");
-        printf("to delete the elements in the tree enter 6\n");
-        printf("to the depth of the tree enter 7\n") ;
-        printf("to get the maximum value of the tree enter 8\n") ;
-        printf("to get the minimum value of the tree enter 9\n") ;
+        printf("to enter the elements into the tree enter------------------------>1\n");
+        printf("to search for the element if it is there in the tree enter------->2\n");
+        printf("to display the elements in the tree in inorder format enter------>3\n");
+        printf("to display the elements in the tree in preorder format enter----->4\n");
+        printf("to display the elements in the tree in postorder format enter---->5\n");
+        printf("to delete the elements in the tree enter------------------------->6\n");
+        printf("to the depth of the tree enter----------------------------------->7\n") ;
+        printf("to get the maximum value of the tree enter----------------------->8\n") ;
+        printf("to get the minimum value of the tree enter----------------------->9\n") ;
+        printf("to check the balance status of the tree enter-------------------->10\n") ;
         scanf("%d",&o);
-        if(o==1)
+        if(o==1 && c==1)
         {
             while(1)
             {
@@ -193,6 +229,22 @@ int main()
                     break;
                 else
                     insert(a);
+            }
+        }
+        else if(o==1 && c==2)
+        {
+            while(1)
+            {
+                printf("enter the data that you want to insert\n");
+                scanf("%d",&a);
+                if(a==-1)
+                    break;
+                else
+                {
+                    insert(a);
+                    temp_head=root_;
+                    balance(temp_head);
+                }
             }
         }
         else if(o==2)
@@ -240,9 +292,20 @@ int main()
         {
             temp_head=root_;
             struct node *min_=min(temp_head);
-            printf("minimum value in the tree is %d ",min_->n);   
+            printf("minimum value in the tree is %d ",min_->n);
         }
-
+        else if(o==10)
+        {
+            temp_head=root_;
+            if(is_Height_Balanced(temp_head))
+            {
+                printf(" tree is balanced\n") ;
+            }
+            else
+            {
+                printf("tree is unbalanced\n") ;
+            }
+        }
         else
         {
             printf("invalid input........\nenter a valid input\n");
