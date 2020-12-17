@@ -129,10 +129,6 @@ struct node* max(struct node *temp)
     }
     return current;
 }
-int balance_factor(struct node * dummy)
-{
-    return depth(dummy->left) - depth(dummy->right) ;
-}
 struct node* delete_(struct node* root, int key)
 {
     if (root == NULL)
@@ -143,7 +139,6 @@ struct node* delete_(struct node* root, int key)
         root->right = delete_(root->right, key);
     else
     {
-        //write some code to delete root_ node from the tree....... 
         if (root->left == NULL)
         {
             struct node* temp = root->right;
