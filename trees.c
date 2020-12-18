@@ -1,92 +1,87 @@
-#include<stdlib.h>
 #include<stdio.h>
 #include<stdbool.h>
-struct node
-{
-    int n;
-    struct node *right,*left;
+struct node {
+    int key;
+    struct node *left, *right;
 };
-struct node *root_;
-struct node *temp_head;
-void insert_1(int k)
+struct node *root=NULL;
+struct node* newNode(int item)
 {
-
-    if ((temp_head->n>k) && (temp_head->left!=NULL))
+    struct node* temp
+        = (struct node*)malloc(sizeof(struct node));
+    temp->key = item;
+    temp->left = temp->right = NULL;
+    return temp;
+}
+void inorder(struct node* root)
+{
+    if (root != NULL)
     {
-        temp_head=temp_head->left;
-        insert_1(k);
-    }
-    else if ((temp_head->n<=k)&&(temp_head->right!=NULL))
-    {
-        temp_head=temp_head->right;
-        insert_1(k);
+        inorder(root->left);
+        printf("%d \n", root->key);
+        inorder(root->right);
     }
 }
-void insert_2(int k)
+void postorder(struct node* root)
 {
-    if(k>=temp_head->n)
+    if (root != NULL)
     {
-        struct node *delta;
-        delta=(struct node*)malloc(sizeof(struct node));
-        delta->left=NULL;
-        delta->right=NULL;
-        delta->n=k;
-        temp_head->right=delta;
-        printf("%d is inserted to the right of %d \n",k,temp_head->n);
-        return;
-    }
-    else if(k<temp_head->n)
-    {
-        struct node *delta;
-        delta=(struct node*)malloc(sizeof(struct node));
-        delta->left=NULL;
-        delta->right=NULL;
-        delta->n=k;
-        temp_head->left=delta;
-        printf("%d is inserted to the left of %d \n",k,temp_head->n);
-        return;
+        inorder(root->left);
+        inorder(root->right);
+        printf("%d \n", root->key);
     }
 }
-void insert(int k)
+void preorder(struct node* root)
 {
-    temp_head=root_;
-    insert_1(k);
-    insert_2(k);
-}
-void search(int k)
-{
-    if(temp_head->n==k)
+    if (root != NULL)
     {
-        if(temp_head->right==NULL && temp_head->left==NULL)
+        printf("%d \n", root->key);
+        inorder(root->left);
+        inorder(root->right);
+    }
+}
+struct node* insert(struct node* node, int key)
+{
+    if (node == NULL)
+        return newNode(key);
+    if (key < node->key)
+        node->left = insert(node->left, key);
+    else
+        node->right = insert(node->right, key);
+    return node;
+}
+void search(int k, struct node *root)
+{
+    if(root->key==k)
+    {
+        if(root->right==NULL && root->left==NULL)
         {
-            printf("NULL<--%d-->NULL\n",temp_head->n);
+            printf("NULL<--%d-->NULL\n",root->key);
             return;
         }
-        else if(temp_head->right==NULL)
+        else if(root->right==NULL)
         {
-            printf("%d<--%d-->NULL\n",temp_head->left->n,k) ;
+            printf("%d<--%d-->NULL\n",root->left->key,k) ;
             return;
         }
-        else if(temp_head->left==NULL)
+        else if(root->left==NULL)
         {
-            printf("NULL<--%d-->%d\n",k,temp_head->right->n) ;
+            printf("NULL<--%d-->%d\n",k,root->right->key) ;
             return;
         }
         else
         {
-            printf("%d<--%d-->%d\n",temp_head->left->n,temp_head->n,temp_head->right->n);
+            printf("%d<--%d-->%d\n",root->left->key,root->key,root->right->key);
             return;
         }
     }
-    else if (k>temp_head->n && temp_head->right!=NULL)
+    else if (k>root->key && root->right!=NULL)
     {
-        temp_head=temp_head->right;
-        search(k);
+        search(k,root->right);
     }
-    else if (k<temp_head->n && temp_head->left!=NULL)
+    else if (k<root->key && root->left!=NULL)
     {
-        temp_head=temp_head->left;
-        search(k);
+        search(k,root->left);
     }
     else
     {
@@ -94,99 +89,46 @@ void search(int k)
         return;
     }
 }
-void inorder(struct node *temp_head)
+struct node* minnode(struct node* node)
 {
-    if (temp_head==NULL)
-        return;
-    inorder(temp_head->left);
-    printf("%d\n",temp_head->n);
-    inorder(temp_head->right);
+    struct node* current = node;
+    while (current && current->left != NULL)
+        current = current->left;
+    return current;
 }
-void postorder(struct node *temp_head)
+struct node* maxnode(struct node* node)
 {
-    if (temp_head==NULL)
-        return;
-    postorder(temp_head->left);
-    postorder(temp_head->right);
-    printf("%d\n",temp_head->n);
+    struct node* current = node;
+    while (current && current->right != NULL)
+        current = current->right;
+    return current;
 }
-void preorder(struct node *temp_head)
+int depth(struct node *root)
 {
-    if (temp_head==NULL)
-        return;
-    printf("%d\n",temp_head->n);
-    preorder(temp_head->left);
-    preorder(temp_head->right);
-}
-int depth(struct node* temp_head)
-{
-    if (temp_head == NULL)
-        return -1;
-    int leftDepth = depth(temp_head->left);
-    int rightDepth = depth(temp_head->right);
+    if (root == NULL)
+        return 0;
+    int leftDepth = depth(root->left);
+    int rightDepth = depth(root->right);
     if (leftDepth > rightDepth)
         return leftDepth + 1;
     else
         return rightDepth + 1;
 }
-struct node* min(struct node *temp)
+bool treeisbalanced(struct node *root)
 {
-    struct node *current=temp;
-    while (current && current->left!=NULL)
-    {
-        current=current->left;
-    }
-    return current;
-}
-struct node* max(struct node *temp)
-{
-    struct node *current=temp;
-    while (current && current->right!=NULL)
-    {
-        current=current->right;
-    }
-    return current;
-}
-struct node* delete_(struct node* root, int key)
-{
-    if (root == NULL)
-        return root;
-    if (key < root->n)
-        root->left = delete_(root->left, key);
-    else if (key > root->n)
-        root->right = delete_(root->right, key);
+    int leftHeight, rightHeight;
+    if(root == NULL)
+        return true;
+    leftHeight = depth(root->left);
+    rightHeight = depth(root->right);
+    if(abs(leftHeight - rightHeight) <= 1 &&
+            treeisbalanced(root->right) &&
+            treeisbalanced(root->left))
+        return true;
     else
-    {
-        if (root->left == NULL)
-        {
-            struct node* temp = root->right;
-            struct node* du=root->right;
-            free(root);
-            return temp;
-        }
-        else if (root->right == NULL)
-        {
-            struct node* temp = root->left;
-            struct node* du=root->left;
-            free(root);
-            return temp;
-        }
-        if(depth(root->right)>=depth(root->left))
-        {
-            struct node* temp = min(root->right);
-            root->n = temp->n;
-            root->right = delete_(root->right, temp->n);
-        }
-        else if(depth(root->right)<depth(root->left))
-        {
-            struct node* temp = max(root->left);
-            root->n = temp->n;
-            root->left = delete_(root->left, temp->n);
-        }
-    }
-    return root;
+        return false;
 }
-bool node_is_Height_Balanced(struct node *root)
+bool nodeisbalanced(struct node *root)
 {
     int leftHeight, rightHeight;
     if(root == NULL)
@@ -198,159 +140,144 @@ bool node_is_Height_Balanced(struct node *root)
     else
         return false;
 }
-bool is_Height_Balanced(struct node *root)
+struct node* delete(struct node* root, int key)
 {
-    int leftHeight, rightHeight;
-    if(root == NULL)
-        return true;
-    leftHeight = depth(root->left);
-    rightHeight = depth(root->right);
-    if(abs(leftHeight - rightHeight) <= 1 &&
-            is_Height_Balanced(root->right) &&
-            is_Height_Balanced(root->left))
-        return true;
-    else
-        return false;
-}
-void balance(struct node *dummy)
-{
-//some logical error
-//balances only one node
-//need to modify code for balancing multiple nodes
-    if (dummy==NULL)
-        return;
-    balance(dummy->left);
-    balance(dummy->right);
-    if(!(node_is_Height_Balanced(dummy)))
-    {
-        int k=dummy->n;
-        printf("%d is unbalanced\n",dummy->n);
-        temp_head=root_;
-        root_=delete_(temp_head,dummy->n);
-        printf("%d is deleted\n",k);
-        insert(k);
+    if (root == NULL)
+        return root;
+    if (key < root->key)
+        root->left = delete(root->left,key) ;
+    else if (key > root->key)
+        root->right = delete(root->right, key);
+    else {
+        if (root->left == NULL) {
+            struct node* temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if (root->right == NULL)
+        {
+            struct node* temp = root->left;
+            free(root);
+            return temp;
+        }
+        if(depth(root->right) >=depth(root->right))
+        {
+            struct node* temp = minnode(root->right);
+            root->key = temp->key;
+            root->right = delete(root->right, temp->key);
+        }
+        else
+        {
+            struct node* temp = maxnode(root->left);
+            root->key = temp->key;
+            root->right = delete(root->left, temp->key);
+        }
     }
-    else
-        printf("%d is balanced\n",dummy->n);
+    return root;
+}
+void balance(struct node *root_)
+{
+    if (root_==NULL)
+        return NULL;
+    balance(root_->left) ;
+    balance(root_->right) ;
+    if(!(nodeisbalanced(root_)))
+    {
+        int k=root_->key;
+        root=delete(root,k) ;
+        printf("%d is deleted\n",k);
+        root=insert(root, k) ;
+        printf("%d is inserted\n",k);
+        if(!(treeisbalanced(root)))
+            balance(root) ;
+    }
 }
 int main()
 {
-    int e,a,o,d,c;
-    root_=(struct node*)malloc(sizeof(struct node));
-    root_->left=NULL;
-    root_->right=NULL;
-    printf("enter the data in the root\n");
-    scanf("%d",&root_->n);
-    printf("for normal tree enter 1\nfor balanced tree enter 2\n") ;
-    scanf("%d",&c);
+    int i,choice,o;
+    printf("1.for normal tree\n2.balanced tree\n") ;
+    scanf("%d",&o);
     while(1)
     {
-        printf("to enter the elements into the tree enter------------------------>1\n");
-        printf("to search for the element if it is there in the tree enter------->2\n");
-        printf("to display the elements in the tree in inorder format enter------>3\n");
-        printf("to display the elements in the tree in preorder format enter----->4\n");
-        printf("to display the elements in the tree in postorder format enter---->5\n");
-        printf("to delete the elements in the tree enter------------------------->6\n");
-        printf("to the depth of the tree enter----------------------------------->7\n") ;
-        printf("to get the maximum value of the tree enter----------------------->8\n") ;
-        printf("to get the minimum value of the tree enter----------------------->9\n") ;
-        printf("to check the balance status of the tree enter-------------------->10\n") ;
-        scanf("%d",&o);
-        if(o==1 && c==1)
+        printf("1.to insert\n2.to search\n3.to delete\n");
+        printf("4.for inorder traversal\n5.for preorder treversal\n6.for postordrer traversal\n") ;
+        printf("7.for minimum value in the tree\n8.for maximum value in tree\n9.to check weather the tree is balanced or not\n") ;
+        printf("10.for depth of the tree\n") ;
+        scanf("%d",&choice);
+        if (choice==1 && o==1)
         {
             while(1)
             {
-                printf("enter the data that you want to insert\n");
-                scanf("%d",&a);
-                if(a==-1)
+                printf("enter the value that you want to insert\n") ;
+                scanf("%d",&i);
+                if(i==-1)
                     break;
                 else
-                    insert(a);
+                    root=insert(root,i);
             }
         }
-        else if(o==1 && c==2)
+        else if(choice==1 && o==2)
         {
             while(1)
             {
-                printf("enter the data that you want to insert\n");
-                scanf("%d",&a);
-                if(a==-1)
+                printf("enter the value that you want to insert\n") ;
+                scanf("%d",&i);
+                if(i==-1)
                     break;
                 else
                 {
-                    insert(a);
-                    temp_head=root_;
-                    balance(temp_head);
+                    root=insert(root,i);
+                    balance(root) ;
                 }
-                temp_head=root_;
-                if(is_Height_Balanced(temp_head))
-                    printf ("tree is balanced\n");
-                else
-                    printf ("tree is unbalanced\n") ;
             }
         }
-        else if(o==2)
+        else if(choice==2)
         {
-            printf("enter the element that you want to search for \n");
-            scanf("%d",&e);
-            temp_head=root_;
-            search(e);
+            while(1)
+            {
+                printf("enter the element that you want to search for\n") ;
+                scanf("%d",&i) ;
+                if(i==-1)
+                    break;
+                search(i,root) ;
+            }
         }
-        else if(o==3)
+        else if(choice==3 && o==2)
         {
-            temp_head=root_;
-            inorder(temp_head);
+            printf ("enter the element that you want to delete\n");
+            scanf("%d",&i) ;
+            root=delete(root,i) ;
+            balance(root) ;
         }
-        else if(o==4)
+        else if(choice==3 && o==1)
         {
-            temp_head=root_;
-            preorder(temp_head);
+            printf ("enter the element that you want to delete\n");
+            scanf("%d",&i) ;
+            root=delete(root,i) ;
         }
-        else if(o==5)
+        else if(choice==4)
         {
-            temp_head=root_;
-            postorder(temp_head);
+            inorder(root);
         }
-        else if(o==6 && c==1)
+        else if(choice==5)
         {
-            struct node *tem=root_;
-            printf("enter the element that you want to delete\n");
-            scanf("%d",&e);
-            root_=delete_(tem,e);
-            printf("value in global root = %d \n",root_->n);
+            preorder(root);
         }
-        else if(o==6 && c==2)
+        else if(choice==6)
         {
-            struct node *tem=root_;
-            printf("enter the element that you want to delete\n") ;
-            scanf("%d",&e) ;
-            root_=delete_(tem,e);
-            temp_head=root_;
-            balance(temp_head);
-            printf("value in global root = %d \n",root_->n);
+            postorder(root) ;
         }
-        else if(o==7)
+        else if(choice==7)
         {
-            temp_head=root_;
-            d=depth(temp_head);
-            printf("depth of the tree is %d\n",d);
+            printf("minimum value in the tree is %d ",minnode(root)->key);
         }
-        else if(o==8)
+        else if(choice==8)
         {
-            temp_head=root_;
-            struct node *max_=max(temp_head);
-            printf("maximum value in the tree is %d ",max_->n);
+            printf("maximum value in the tree is %d ",maxnode(root)->key);
         }
-        else if(o==9)
+        else if(choice==9)
         {
-            temp_head=root_;
-            struct node *min_=min(temp_head);
-            printf("minimum value in the tree is %d ",min_->n);
-        }
-        else if(o==10)
-        {
-            temp_head=root_;
-            if(is_Height_Balanced(temp_head))
+            if(treeisbalanced(root))
             {
                 printf(" tree is balanced\n") ;
             }
@@ -358,10 +285,17 @@ int main()
             {
                 printf("tree is unbalanced\n") ;
             }
+
         }
+        else if(choice==10) 
+        {
+            printf("depth of the tree is \n",depth(root)) ;
+        }
+        
+        
         else
         {
-            printf("invalid input........\nenter a valid input\n");
+            printf("invalid input\nplease enter a valid input\n") ;
         }
     }
 }
