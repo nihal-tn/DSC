@@ -106,7 +106,7 @@ struct node* maxnode(struct node* node)
 int depth(struct node *root)
 {
     if (root == NULL)
-        return 0;
+        return -1;
     int leftDepth = depth(root->left);
     int rightDepth = depth(root->right);
     if (leftDepth > rightDepth)
@@ -299,3 +299,4 @@ int main()
         }
     }
 }
+    
