@@ -57,8 +57,26 @@ void search(int k)
 {
     if(temp_head->n==k)
     {
-        printf("%d is in the tree.....\n%d<--%d-->%d\n",k,temp_head->left,temp_head->n,temp_head->right);
-        return;
+        if(temp_head->right==NULL && temp_head->left==NULL)
+        {
+            printf("NULL<--%d-->NULL\n",temp_head->n);
+            return;
+        }
+        else if(temp_head->right==NULL)
+        {
+            printf("%d<--%d-->NULL\n",temp_head->left->n,k) ;
+            return;
+        }
+        else if(temp_head->left==NULL)
+        {
+            printf("NULL<--%d-->%d\n",k,temp_head->right->n) ;
+            return;
+        }
+        else
+        {
+            printf("%d<--%d-->%d\n",temp_head->left->n,temp_head->n,temp_head->right->n);
+            return;
+        }
     }
     else if (k>temp_head->n && temp_head->right!=NULL)
     {
@@ -168,6 +186,18 @@ struct node* delete_(struct node* root, int key)
     }
     return root;
 }
+bool node_is_Height_Balanced(struct node *root)
+{
+    int leftHeight, rightHeight;
+    if(root == NULL)
+        return true;
+    leftHeight = depth(root->left);
+    rightHeight = depth(root->right);
+    if(abs(leftHeight - rightHeight) <= 1)
+        return true;
+    else
+        return false;
+}
 bool is_Height_Balanced(struct node *root)
 {
     int leftHeight, rightHeight;
@@ -184,18 +214,24 @@ bool is_Height_Balanced(struct node *root)
 }
 void balance(struct node *dummy)
 {
+//some logical error
+//balances only one node
+//need to modify code for balancing multiple nodes
     if (dummy==NULL)
         return;
     balance(dummy->left);
     balance(dummy->right);
-    if(!(is_Height_Balanced(dummy))) 
+    if(!(node_is_Height_Balanced(dummy)))
     {
         int k=dummy->n;
+        printf("%d is unbalanced\n",dummy->n);
         temp_head=root_;
         root_=delete_(temp_head,dummy->n);
         printf("%d is deleted\n",k);
         insert(k);
     }
+    else
+        printf("%d is balanced\n",dummy->n);
 }
 int main()
 {
@@ -246,6 +282,11 @@ int main()
                     temp_head=root_;
                     balance(temp_head);
                 }
+                temp_head=root_;
+                if(is_Height_Balanced(temp_head))
+                    printf ("tree is balanced\n");
+                else
+                    printf ("tree is unbalanced\n") ;
             }
         }
         else if(o==2)
@@ -278,7 +319,7 @@ int main()
             root_=delete_(tem,e);
             printf("value in global root = %d \n",root_->n);
         }
-        else if(o==6 && c==2) 
+        else if(o==6 && c==2)
         {
             struct node *tem=root_;
             printf("enter the element that you want to delete\n") ;
