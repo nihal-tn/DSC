@@ -289,7 +289,7 @@ int main()
         }
         else if(choice==10) 
         {
-            printf("depth of the tree is \n",depth(root)) ;
+            printf("depth of the tree is %d\n",depth(root)) ;
         }
         
         
