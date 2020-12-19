@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdbool.h>
+#include<time.h>
 struct node {
     int key;
     struct node *left, *right;
@@ -184,12 +185,82 @@ void balance(struct node *root_)
     if(!(nodeisbalanced(root_)))
     {
         int k=root_->key;
-        root=delete(root,k) ;
-        printf("%d is deleted\n",k);
-        root=insert(root, k) ;
-        printf("%d is inserted\n",k);
-        if(!(treeisbalanced(root)))
-            balance(root) ;
+        if(root->key==k)
+        {
+            root=delete(root,k) ;
+            printf("%d is deleted\n",k);
+            root=insert(root, k) ;
+            printf("%d is inserted\n",k);
+            if(!(treeisbalanced(root)))
+                balance(root) ;
+            return;
+        }
+        else if(k>=root->key)
+        {
+            if(k==root->right->key)
+            {
+                root->right=delete(root->right,k) ;
+                printf("%d is deleted\n",k);
+                root->right=insert(root->right, k) ;
+                printf("%d is inserted\n",k);
+                if(!(treeisbalanced(root)))
+                    balance(root->right) ;
+                return;
+            }
+            else if(k>root->right->key)
+            {
+                root->right->right=delete(root->right->right,k) ;
+                printf("%d is deleted\n",k);
+                root->right->right=insert(root->right->right, k) ;
+                printf("%d is inserted\n",k);
+                if(!(treeisbalanced(root)))
+                    balance(root->right->right) ;//once try giving balance(root->right->right)
+                return;
+            }
+            else
+            {
+                root->right->left=delete(root->right->left,k) ;
+                printf("%d is deleted\n",k);
+                root->right->left=insert(root->right->left, k) ;
+                printf("%d is inserted\n",k);
+                if(!(treeisbalanced(root)))
+                    balance(root->right->left) ;//onec try giving balance(root->right->left)
+                return;
+            }
+        }
+        else
+        {
+            if(k==root->left->key)
+            {
+                root->left=delete(root->left,k) ;
+                printf("%d is deleted\n",k);
+                root->left=insert(root->left, k) ;
+                printf("%d is inserted\n",k);
+                if(!(treeisbalanced(root)))
+                    balance(root) ;
+                return;
+            }
+            else if(k>root->left->key)
+            {
+                root->left->right=delete(root->left->right,k) ;
+                printf("%d is deleted\n",k);
+                root->left->right=insert(root->left->right, k) ;
+                printf("%d is inserted\n",k);
+                if(!(treeisbalanced(root)))
+                    balance(root->left->right) ;//once try giving balance(root->left->right)
+                return;
+            }
+            else
+            {
+                root->left->left=delete(root->left->left,k) ;
+                printf("%d is deleted\n",k);
+                root->left->left=insert(root->left->left, k) ;
+                printf("%d is inserted\n",k);
+                if(!(treeisbalanced(root)))
+                    balance(root->left->left) ;//once try giving balance(root->left->left)
+                return;
+            }
+        }
     }
 }
 int main()
@@ -202,7 +273,7 @@ int main()
         printf("1.to insert\n2.to search\n3.to delete\n");
         printf("4.for inorder traversal\n5.for preorder treversal\n6.for postordrer traversal\n") ;
         printf("7.for minimum value in the tree\n8.for maximum value in tree\n9.to check weather the tree is balanced or not\n") ;
-        printf("10.for depth of the tree\n") ;
+        printf("10.for depth of the tree\n11.to get the value in the root\n") ;
         scanf("%d",&choice);
         if (choice==1 && o==1)
         {
@@ -223,13 +294,13 @@ int main()
                 printf("enter the value that you want to insert\n") ;
                 scanf("%d",&i);
                 if(i==-1)
-                    break;
+                break;
                 else
                 {
-                    root=insert(root,i);
-                    balance(root) ;
+                root=insert(root,i);
+                balance(root) ;
                 }
-           }
+            }
         }
         else if(choice==2)
         {
@@ -269,11 +340,11 @@ int main()
         }
         else if(choice==7)
         {
-            printf("minimum value in the tree is %d ",minnode(root)->key);
+            printf("minimum value in the tree is %d \n",minnode(root)->key);
         }
         else if(choice==8)
         {
-            printf("maximum value in the tree is %d ",maxnode(root)->key);
+            printf("maximum value in the tree is %d \n",maxnode(root)->key);
         }
         else if(choice==9)
         {
@@ -287,16 +358,18 @@ int main()
             }
 
         }
-        else if(choice==10) 
+        else if(choice==10)
         {
             printf("depth of the tree is %d\n",depth(root)) ;
         }
-        
-        
+        else if(choice==11)
+        {
+            printf ("value in the root is %d\n",root->key) ;
+        }
+
         else
         {
             printf("invalid input\nplease enter a valid input\n") ;
         }
     }
 }
-    
