@@ -77,13 +77,9 @@ void search(int k, struct node *root)
         }
     }
     else if (k>root->key && root->right!=NULL)
-    {
         search(k,root->right);
-    }
     else if (k<root->key && root->left!=NULL)
-    {
         search(k,root->left);
-    }
     else
     {
         printf("%d is not in the tree....\n",k);
@@ -294,11 +290,11 @@ int main()
                 printf("enter the value that you want to insert\n") ;
                 scanf("%d",&i);
                 if(i==-1)
-                break;
+                    break;
                 else
                 {
-                root=insert(root,i);
-                balance(root) ;
+                    root=insert(root,i);
+                    balance(root) ;
                 }
             }
         }
@@ -327,49 +323,27 @@ int main()
             root=delete(root,i) ;
         }
         else if(choice==4)
-        {
             inorder(root);
-        }
         else if(choice==5)
-        {
             preorder(root);
-        }
         else if(choice==6)
-        {
             postorder(root) ;
-        }
         else if(choice==7)
-        {
             printf("minimum value in the tree is %d \n",minnode(root)->key);
-        }
         else if(choice==8)
-        {
             printf("maximum value in the tree is %d \n",maxnode(root)->key);
-        }
         else if(choice==9)
         {
             if(treeisbalanced(root))
-            {
                 printf(" tree is balanced\n") ;
-            }
             else
-            {
                 printf("tree is unbalanced\n") ;
-            }
-
         }
         else if(choice==10)
-        {
             printf("depth of the tree is %d\n",depth(root)) ;
-        }
         else if(choice==11)
-        {
             printf ("value in the root is %d\n",root->key) ;
-        }
-
         else
-        {
             printf("invalid input\nplease enter a valid input\n") ;
-        }
     }
 }
