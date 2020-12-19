@@ -106,7 +106,7 @@ struct node* maxnode(struct node* node)
 int depth(struct node *root)
 {
     if (root == NULL)
-        return -1;
+        return 0;
     int leftDepth = depth(root->left);
     int rightDepth = depth(root->right);
     if (leftDepth > rightDepth)
@@ -229,7 +229,7 @@ int main()
                     root=insert(root,i);
                     balance(root) ;
                 }
-            }
+           }
         }
         else if(choice==2)
         {
