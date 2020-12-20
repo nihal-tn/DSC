@@ -233,7 +233,7 @@ void balance(struct node *root_)
                 root->left=insert(root->left, k) ;
                 printf("%d is inserted\n",k);
                 if(!(treeisbalanced(root)))
-                    balance(root) ;
+                    balance(root->left) ;
                 return;
             }
             else if(k>root->left->key)
