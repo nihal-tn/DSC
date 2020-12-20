@@ -199,7 +199,7 @@ void balance(struct node *root_)
                 printf("%d is deleted\n",k);
                 root->right=insert(root->right, k) ;
                 printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root)))
+                if(!(treeisbalanced(root->right)))
                     balance(root->right) ;
                 return;
             }
@@ -209,7 +209,7 @@ void balance(struct node *root_)
                 printf("%d is deleted\n",k);
                 root->right->right=insert(root->right->right, k) ;
                 printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root)))
+                if(!(treeisbalanced(root->right->right)))
                     balance(root->right->right) ;//once try giving balance(root->right->right)
                 return;
             }
@@ -219,7 +219,7 @@ void balance(struct node *root_)
                 printf("%d is deleted\n",k);
                 root->right->left=insert(root->right->left, k) ;
                 printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root)))
+                if(!(treeisbalanced(root->right->left)))
                     balance(root->right->left) ;//onec try giving balance(root->right->left)
                 return;
             }
@@ -232,7 +232,7 @@ void balance(struct node *root_)
                 printf("%d is deleted\n",k);
                 root->left=insert(root->left, k) ;
                 printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root)))
+                if(!(treeisbalanced(root->left)))
                     balance(root->left) ;
                 return;
             }
@@ -242,7 +242,7 @@ void balance(struct node *root_)
                 printf("%d is deleted\n",k);
                 root->left->right=insert(root->left->right, k) ;
                 printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root)))
+                if(!(treeisbalanced(root->left->right)))
                     balance(root->left->right) ;//once try giving balance(root->left->right)
                 return;
             }
@@ -252,7 +252,7 @@ void balance(struct node *root_)
                 printf("%d is deleted\n",k);
                 root->left->left=insert(root->left->left, k) ;
                 printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root)))
+                if(!(treeisbalanced(root->left->left)))
                     balance(root->left->left) ;//once try giving balance(root->left->left)
                 return;
             }
