@@ -157,7 +157,7 @@ struct node* delete(struct node* root, int key)
             free(root);
             return temp;
         }
-        if(depth(root->right) >=depth(root->right))
+        if(depth(root->right) >=depth(root->left))
         {
             struct node* temp = minnode(root->right);
             root->key = temp->key;
@@ -167,7 +167,7 @@ struct node* delete(struct node* root, int key)
         {
             struct node* temp = maxnode(root->left);
             root->key = temp->key;
-            root->right = delete(root->left, temp->key);
+            root->left = delete(root->left, temp->key);
         }
     }
     return root;
