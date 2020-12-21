@@ -27,8 +27,8 @@ void postorder(struct node* root)
 {
     if (root != NULL)
     {
-        inorder(root->left);
-        inorder(root->right);
+        postorder(root->left);
+        postorder(root->right);
         printf("%d \n", root->key);
     }
 }
@@ -37,8 +37,8 @@ void preorder(struct node* root)
     if (root != NULL)
     {
         printf("%d \n", root->key);
-        inorder(root->left);
-        inorder(root->right);
+        preorder(root->left);
+        preorder(root->right);
     }
 }
 struct node* insert(struct node* node, int key)
