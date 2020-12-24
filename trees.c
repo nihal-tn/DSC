@@ -172,92 +172,25 @@ struct node* delete(struct node* root, int key)
     }
     return root;
 }
-void balance(struct node *root_)
+void balance(struct node* nd, int key)
 {
-    if (root_==NULL)
-        return NULL;
-    balance(root_->left) ;
-    balance(root_->right) ;
-    if(!(nodeisbalanced(root_)))
+    if (nd == NULL)
+        return;
+    if (key < nd->key)
+        balance(nd->left, key);
+    else if (key > nd->key)
+        balance(nd->right, key);
+
+    if(!nodeisbalanced(nd))
     {
-        int k=root_->key;
-        if(root->key==k)
-        {
-            root=delete(root,k) ;
-            printf("%d is deleted\n",k);
-            root=insert(root, k) ;
-            printf("%d is inserted\n",k);
-            if(!(treeisbalanced(root)))
-                balance(root) ;
-            return;
-        }
-        else if(k>=root->key)
-        {
-            if(k==root->right->key)
-            {
-                root->right=delete(root->right,k) ;
-                printf("%d is deleted\n",k);
-                root->right=insert(root->right, k) ;
-                printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root->right)))
-                    balance(root->right) ;
-                return;
-            }
-            else if(k>root->right->key)
-            {
-                root->right->right=delete(root->right->right,k) ;
-                printf("%d is deleted\n",k);
-                root->right->right=insert(root->right->right, k) ;
-                printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root->right->right)))
-                    balance(root->right->right) ;//once try giving balance(root->right->right)
-                return;
-            }
-            else
-            {
-                root->right->left=delete(root->right->left,k) ;
-                printf("%d is deleted\n",k);
-                root->right->left=insert(root->right->left, k) ;
-                printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root->right->left)))
-                    balance(root->right->left) ;//onec try giving balance(root->right->left)
-                return;
-            }
-        }
-        else
-        {
-            if(k==root->left->key)
-            {
-                root->left=delete(root->left,k) ;
-                printf("%d is deleted\n",k);
-                root->left=insert(root->left, k) ;
-                printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root->left)))
-                    balance(root->left) ;
-                return;
-            }
-            else if(k>root->left->key)
-            {
-                root->left->right=delete(root->left->right,k) ;
-                printf("%d is deleted\n",k);
-                root->left->right=insert(root->left->right, k) ;
-                printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root->left->right)))
-                    balance(root->left->right) ;//once try giving balance(root->left->right)
-                return;
-            }
-            else
-            {
-                root->left->left=delete(root->left->left,k) ;
-                printf("%d is deleted\n",k);
-                root->left->left=insert(root->left->left, k) ;
-                printf("%d is inserted\n",k);
-                if(!(treeisbalanced(root->left->left)))
-                    balance(root->left->left) ;//once try giving balance(root->left->left)
-                return;
-            }
-        }
-    }
+        int k = nd->key;
+        root = delete(root, nd->key);
+        printf("%d is deleted\n",k);
+        balance(root, k) ;
+        root = insert(root, k) ;
+        printf("%d is inserted\n",k);
+        balance(root, k) ;
+   }
 }
 int main()
 {
@@ -281,6 +214,7 @@ int main()
                     break;
                 else
                     root=insert(root,i);
+                    printf("%d is inserted\n",i) ;
             }
         }
         else if(choice==1 && o==2)
@@ -294,9 +228,12 @@ int main()
                 else
                 {
                     root=insert(root,i);
-                    balance(root) ;
+                    printf("%d is inserted\n",i) ;
+                    balance(root, i) ;
                 }
             }
+            clock_t end=clock() ;
+            printf("%d\n",(double)(end - begin) / CLOCKS_PER_SEC) ;
         }
         else if(choice==2)
         {
@@ -314,13 +251,15 @@ int main()
             printf ("enter the element that you want to delete\n");
             scanf("%d",&i) ;
             root=delete(root,i) ;
-            balance(root) ;
+            printf("%d is deleted\n",i) ;
+            balance(root, i) ;
         }
         else if(choice==3 && o==1)
         {
             printf ("enter the element that you want to delete\n");
             scanf("%d",&i) ;
             root=delete(root,i) ;
+            printf("%d is deleted\n",i) ;
         }
         else if(choice==4)
             inorder(root);
