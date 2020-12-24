@@ -186,7 +186,8 @@ void balance(struct node* nd, int key)
         int k = nd->key;
         root = delete(root, nd->key);
         printf("%d is deleted\n",k);
-        balance(root, k) ;
+        if(!nodeisbalanced(nd))
+            balance(root, k) ;
         root = insert(root, k) ;
         printf("%d is inserted\n",k);
         balance(root, k) ;
@@ -214,7 +215,7 @@ int main()
                     break;
                 else
                     root=insert(root,i);
-                    printf("%d is inserted\n",i) ;
+                printf("%d is inserted\n",i) ;
             }
         }
         else if(choice==1 && o==2)
@@ -232,8 +233,6 @@ int main()
                     balance(root, i) ;
                 }
             }
-            clock_t end=clock() ;
-            printf("%d\n",(double)(end - begin) / CLOCKS_PER_SEC) ;
         }
         else if(choice==2)
         {
