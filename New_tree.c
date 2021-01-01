@@ -116,7 +116,7 @@ struct Node* delete(struct Node* root, int key)
     if(abs(balance)>1)
     {
         int k=root->key;
-        //printf("%d deleting\n",k);
+        printf("%d deleting\n",k);
         root=delete(root, k);
         root=insert(root, k);
     }
@@ -142,8 +142,8 @@ struct Node *insert(struct Node *node, int key)
     if(abs(balance)>1)
     {
         int k=node->key;
-        printf("%d deleting\n",k);
         node=delete(node, k);
+        printf("%d deleted\n",k);
         node=insert(node, k);
     }
     return node;
@@ -161,7 +161,7 @@ int main()
 {
     struct Node *root = NULL;
     clock_t begin=clock() ;
-    for (int i=0; i<1000; i++)
+    for (int i=0; i<10; i++)
     {
         root=insert(root, i) ;
     }
